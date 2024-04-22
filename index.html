@@ -23,6 +23,14 @@
       input[type="number"] {
         -moz-appearance: textfield;
       }
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: red;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       #exchange-section {
         width: 430px;
         height: 412px;
@@ -202,19 +210,9 @@
         </button>
       </div>
       <div class="exchange-input-container">
-        <label
-          for="exchange-input1"
-          style="display: block"
-          class="exchange-input-label"
-          >You send</label
-        >
+        <label for="exchange-input1" style="display: block" class="exchange-input-label">You send</label>
         <span id="input1" class="input-currency currency1">
-          <input
-            type="number"
-            name=""
-            id="exchange-input1"
-            class="exchange-input"
-            autocomplete="off"
+          <input type="number" name="" id="exchange-input1" class="exchange-input" autocomplete="off"
         /></span>
         <span class="light-text">
           Need higher limits?
@@ -222,25 +220,13 @@
         </span>
       </div>
       <div class="exchange-input-container">
-        <label
-          for="exchange-input2"
-          style="display: block"
-          class="exchange-input-label"
-          >They Receive</label
-        >
+        <label for="exchange-input2" style="display: block" class="exchange-input-label">They Receive</label>
         <span id="input2" class="input-currency currency2">
-          <input
-            type="number"
-            name=""
-            id="exchange-input2"
-            class="exchange-input"
-            autocomplete="off"
+          <input type="number" name="" id="exchange-input2" class="exchange-input" autocomplete="off"
         /></span>
       </div>
       <div class="exchange-promo">
-        <span class="light-text promo-text"
-          >Promo rate applied on your first 3 transfers</span
-        >
+        <span class="light-text promo-text">Promo rate applied on your first 3 transfers</span>
         <span class="exchange-promo-offer">
           <img
             src="https://raw.githubusercontent.com/Tang-Application/public_assets/d61e05ef4f32f8b41a56bc97ddb8a13020efa1e0/promo.svg"
@@ -290,9 +276,7 @@
 
         // Update Promo
         const promoText = document.querySelector(".exchange-promo-offer>span");
-        promoText.innerHTML = isOutbound
-          ? `$1 = ₱${exchangeRates.outbound}`
-          : `$1 = ₱${exchangeRates.inbound}`;
+        promoText.innerHTML = isOutbound ? `$1 = ₱${exchangeRates.outbound}` : `$1 = ₱${exchangeRates.inbound}`;
 
         // Reset input and range
         const input1 = document.querySelector("#exchange-input1");
