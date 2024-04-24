@@ -168,6 +168,12 @@
         display: none;
       }
 
+      .promo-parent-container {
+        min-height: 32px;
+        display: flex;
+        flex-direction: column;
+      }
+
       @media only screen and (max-width: 600px) {
         body {
           display: flex;
@@ -269,23 +275,25 @@
             autocomplete="off"
         /></span>
       </div>
-      <div class="exchange-promo hide-me" id="promo-container">
-        <span class="light-text promo-text"
-          >Promo rate applied on your first 3 transfers</span
-        >
-        <span class="exchange-promo-offer">
-          <img
-            src="https://raw.githubusercontent.com/Tang-Application/public_assets/d61e05ef4f32f8b41a56bc97ddb8a13020efa1e0/promo.svg"
-            alt="promo"
-          />
-          <span class="light-text">0</span>
-        </span>
-      </div>
-      <div class="offer-container hide-me" id="offer-container">
-        <span class="light-text" style="color: #00873f"
-          >You save
-          <span style="font-weight: 700" id="offer-value"></span>
-        </span>
+      <div class="promo-parent-container">
+        <div class="exchange-promo hide-me" id="promo-container">
+          <span class="light-text promo-text"
+            >Promo rate applied on your first 3 transfers</span
+          >
+          <span class="exchange-promo-offer">
+            <img
+              src="https://raw.githubusercontent.com/Tang-Application/public_assets/d61e05ef4f32f8b41a56bc97ddb8a13020efa1e0/promo.svg"
+              alt="promo"
+            />
+            <span class="light-text">0</span>
+          </span>
+        </div>
+        <div class="offer-container hide-me" id="offer-container">
+          <span class="light-text" style="color: #00873f"
+            >You save
+            <span style="font-weight: 700" id="offer-value"></span>
+          </span>
+        </div>
       </div>
       <button id="submit-btn">Continue</button>
     </section>
