@@ -538,6 +538,8 @@
         }
 
         promoText.textContent = `₱${exchangeRates.outbound} = $1`;
+        exchangeInput1.placeholder = exchangeRates.outbound;
+        exchangeInput2.placeholder = 1;
 
         exchangeSwitch.addEventListener("click", _.debounce(changeFlow, 200));
         exchangeInput1.addEventListener("input", handleInput1);
