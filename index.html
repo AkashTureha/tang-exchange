@@ -5,6 +5,7 @@
     <link rel="preconnect" href="https://rsms.me/" />
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+    <script src="./currency.js"></script>
     <style>
       :root {
         --currency1: "₱";
@@ -15,6 +16,10 @@
         margin: 0;
         padding: 0;
       }
+      body {
+        width: 100%;
+        height: 100%;
+      }
       input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button {
         -webkit-appearance: none;
@@ -23,24 +28,17 @@
       input[type="number"] {
         -moz-appearance: textfield;
       }
-      body {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
       #exchange-section {
         width: 430px;
-        height: 412px;
+        height: fit-content;
         background-color: white;
         padding: 16px;
         border-radius: 12px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
         font-family: Inter;
         user-select: none;
+        gap: 4px;
       }
       #exchange-section > * {
         -webkit-transition: all 0.3s ease-in-out;
@@ -62,7 +60,6 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        cursor: pointer;
         border: 1px solid #cad0db;
         background-color: white;
         gap: 8px;
@@ -128,12 +125,14 @@
         letter-spacing: 0.1;
         text-align: center;
         color: white;
+        margin-top: 8px;
       }
       .offer-container {
         background: #bbe4ca;
         padding: 2px 12px;
         border-radius: 40px;
         align-self: flex-end;
+        margin: 4px 0 0 0;
       }
       .input-currency {
         position: relative;
@@ -165,8 +164,11 @@
         bottom: -1px;
         height: 24px;
       }
+      .hide-me {
+        display: none;
+      }
 
-      @media only screen and (max-width: 425px) {
+      @media only screen and (max-width: 600px) {
         body {
           display: flex;
           justify-content: center;
@@ -178,8 +180,11 @@
           width: 60%;
         }
         #exchange-section {
-          height: 464px;
+          height: fit-content;
           width: 96%;
+        }
+        .offer-container {
+          margin: 0;
         }
       }
     </style>
@@ -187,143 +192,341 @@
   <body>
     <section id="exchange-section">
       <div id="exchange-switch-container">
-        <button id="exchange-btn1" class="exchange-switch-btn">
+        <div id="exchange-btn1" class="exchange-switch-btn">
           <img
             src="https://raw.githubusercontent.com/Tang-Application/public_assets/54e4515dc00c6eb51c77aa586b894e1f61b44a21/ph_flag.svg"
             alt="Philippines"
           />
           <h1 class="exchange-switch-btn-title">PH</h1>
-        </button>
+        </div>
         <img
           id="exchange-switch"
           style="cursor: pointer"
           src="https://raw.githubusercontent.com/Tang-Application/public_assets/2f8be119b0b3b8fa046f6ca6ab5b8bed087fb72d/switch.svg"
           alt="switch"
         />
-        <button id="exchange-btn2" class="exchange-switch-btn">
+        <div id="exchange-btn2" class="exchange-switch-btn">
           <img
             src="https://raw.githubusercontent.com/Tang-Application/public_assets/54e4515dc00c6eb51c77aa586b894e1f61b44a21/us_flag.svg"
             alt="United States"
           />
           <h1 class="exchange-switch-btn-title">U.S.</h1>
-        </button>
+        </div>
       </div>
       <div class="exchange-input-container">
-        <label for="exchange-input1" style="display: block" class="exchange-input-label">You send</label>
+        <label
+          for="exchange-input1"
+          style="display: block"
+          class="exchange-input-label"
+          >You send</label
+        >
         <span id="input1" class="input-currency currency1">
-          <input type="number" name="" id="exchange-input1" class="exchange-input" autocomplete="off"
+          <input
+            type="text"
+            name=""
+            id="exchange-input1"
+            class="exchange-input"
+            autocomplete="off"
+            inputmode="decimal"
         /></span>
-        <span class="light-text">
+        <span class="light-text hide-me" id="higher-limits">
           Need higher limits?
           <span style="color: #4cb4fa; cursor: pointer">Contact us</span>
         </span>
       </div>
       <div class="exchange-input-container">
-        <label for="exchange-input2" style="display: block" class="exchange-input-label">They Receive</label>
+        <label
+          for="exchange-input2"
+          style="display: block"
+          class="exchange-input-label"
+          >They Receive</label
+        >
         <span id="input2" class="input-currency currency2">
-          <input type="number" name="" id="exchange-input2" class="exchange-input" autocomplete="off"
+          <input
+            type="text"
+            name=""
+            id="exchange-input2"
+            class="exchange-input"
+            autocomplete="off"
         /></span>
       </div>
-      <div class="exchange-promo">
-        <span class="light-text promo-text">Promo rate applied on your first 3 transfers</span>
+      <div class="exchange-promo hide-me" id="promo-container">
+        <span class="light-text promo-text"
+          >Promo rate applied on your first 3 transfers</span
+        >
         <span class="exchange-promo-offer">
           <img
             src="https://raw.githubusercontent.com/Tang-Application/public_assets/d61e05ef4f32f8b41a56bc97ddb8a13020efa1e0/promo.svg"
             alt="promo"
           />
-          <span class="light-text">$1 = ₱50</span>
+          <span class="light-text">0</span>
         </span>
       </div>
-      <div class="offer-container">
+      <div class="offer-container hide-me" id="offer-container">
         <span class="light-text" style="color: #00873f"
           >You save
-          <span style="font-weight: 700">₱10,180.00</span>
+          <span style="font-weight: 700" id="offer-value"></span>
         </span>
       </div>
       <button id="submit-btn">Continue</button>
     </section>
     <script>
+      const defaultRates = { inbound: 55, outbound: 60 };
+      const promoRates = { inbound: 60, outbound: 50 };
+      const currencyFormatter = new Intl.NumberFormat("en-US", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      });
+
       let isOutbound = true;
-      const defaultRates = { inbound: 55, outbound: 50 };
       let exchangeRates = defaultRates;
+      let prevInput1 = 0;
+      let prevInput2 = 0;
+      let showRate = true;
+
+      // inputs
+      const input1Container = document.querySelector("#input1");
+      const input2Container = document.querySelector("#input2");
+
+      // flags
+      const btn1Flag = document.querySelector("#exchange-btn1>img");
+      const btn2Flag = document.querySelector("#exchange-btn2>img");
+
+      // country
+      const btn1Title = document.querySelector("#exchange-btn1>h1");
+      const btn2Title = document.querySelector("#exchange-btn2>h1");
+
+      // promo
+      const promoText = document.querySelector(".exchange-promo-offer>span");
+      const promoContainer = document.querySelector("#promo-container");
+
+      // switch
+      const exchangeSwitch = document.querySelector("#exchange-switch");
+
+      // inputs
+      const exchangeInput1 = document.querySelector("#exchange-input1");
+      const exchangeInput2 = document.querySelector("#exchange-input2");
+
+      // submit
+      const submitBtn = document.querySelector("#submit-btn");
+
+      // higher limits
+      const higherLimits = document.querySelector("#higher-limits");
+
+      // offer
+      const offerContainer = document.querySelector("#offer-container");
+      const offerValue = document.querySelector("#offer-value");
+
+      const updateInput1 = () => {
+        const exchangeValue = isOutbound
+          ? prevInput2 * exchangeRates.outbound
+          : prevInput2 / exchangeRates.inbound;
+
+        const offerExchangeValue = isOutbound
+          ? prevInput2 * defaultRates.outbound - exchangeValue
+          : prevInput2 / defaultRates.inbound - exchangeValue;
+
+        exchangeInput1.value = currencyFormatter.format(
+          currency(exchangeValue)
+        );
+
+        prevInput1 = exchangeValue;
+
+        if (offerExchangeValue > 0) {
+          offerContainer.classList.remove("hide-me");
+          offerValue.textContent = isOutbound
+            ? `₱ ${currencyFormatter.format(currency(offerExchangeValue))}`
+            : `$ ${currencyFormatter.format(currency(offerExchangeValue))}`;
+        } else {
+          offerContainer.classList.add("hide-me");
+        }
+      };
+
+      const updateInput2 = () => {
+        const exchangeValue = isOutbound
+          ? prevInput1 / exchangeRates.outbound
+          : prevInput1 * exchangeRates.inbound;
+
+        const offerExchangeValue = isOutbound
+          ? exchangeValue * defaultRates.outbound - prevInput1
+          : exchangeValue / defaultRates.inbound - prevInput1;
+
+        exchangeInput2.value = currencyFormatter.format(
+          currency(exchangeValue)
+        );
+
+        prevInput2 = exchangeValue;
+
+        if (offerExchangeValue > 0) {
+          offerContainer.classList.remove("hide-me");
+          offerValue.textContent = isOutbound
+            ? `₱ ${currencyFormatter.format(currency(offerExchangeValue))}`
+            : `$ ${currencyFormatter.format(currency(offerExchangeValue))}`;
+        } else {
+          offerContainer.classList.add("hide-me");
+        }
+      };
+
+      // debounce
+      const inputDebounce1 = _.debounce(updateInput1, 200);
+      const inputDebounce2 = _.debounce(updateInput2, 200);
+
+      const handleShowRate = () => {
+        if (!showRate) {
+          return;
+        }
+        showRate = false;
+        promoContainer.classList.remove("hide-me");
+        promoText.textContent = isOutbound
+          ? `₱${exchangeRates.outbound} = $1`
+          : `$1 = ₱${exchangeRates.inbound}`;
+      };
 
       const changeFlow = () => {
         isOutbound = !isOutbound;
 
         // Update currency
-        const input1Container = document.querySelector("#input1");
-        const input2Container = document.querySelector("#input2");
         input1Container.classList.toggle("currency1");
         input1Container.classList.toggle("currency2");
         input2Container.classList.toggle("currency1");
         input2Container.classList.toggle("currency2");
 
         // Update Flag
-        const btn1Flag = document.querySelector("#exchange-btn1>img");
-        const btn2Flag = document.querySelector("#exchange-btn2>img");
-
         const tempUrl = btn1Flag.src;
         btn1Flag.src = btn2Flag.src;
         btn2Flag.src = tempUrl;
 
         // Update Country
-        const btn1Title = document.querySelector("#exchange-btn1>h1");
-        const btn2Title = document.querySelector("#exchange-btn2>h1");
-
-        btn1Title.innerHTML = isOutbound ? "PH" : "U.S.";
-        btn2Title.innerHTML = isOutbound ? "U.S." : "PH";
+        btn1Title.textContent = isOutbound ? "PH" : "U.S.";
+        btn2Title.textContent = isOutbound ? "U.S." : "PH";
 
         // Update Promo
-        const promoText = document.querySelector(".exchange-promo-offer>span");
-        promoText.innerHTML = isOutbound ? `$1 = ₱${exchangeRates.outbound}` : `$1 = ₱${exchangeRates.inbound}`;
+        promoText.textContent = isOutbound
+          ? `₱${exchangeRates.outbound} = $1`
+          : `$1 = ₱${exchangeRates.inbound}`;
 
         // Reset input and range
-        const input1 = document.querySelector("#exchange-input1");
-        input1.value = "";
-        input1.max;
-        const input2 = document.querySelector("#exchange-input2");
-        input2.value = "";
+        exchangeInput1.value = "";
+        exchangeInput2.value = "";
+        prevInput1 = 0;
+        prevInput2 = 0;
+        showRate = true;
+
+        higherLimits.classList.add("hide-me");
+        offerContainer.classList.add("hide-me");
+        promoContainer.classList.add("hide-me");
       };
 
-      const updateInput1 = (e) => {
-        const exchangeInput = document.querySelector("#exchange-input2");
-        if (!isNaN(e.target.value)) {
-          const exchangeValue = isOutbound
-            ? e.target.value / exchangeRates.outbound
-            : e.target.value * exchangeRates.inbound;
-          exchangeInput.value = exchangeValue;
+      const handleInput1Logic = (currentValue) => {
+        if (isOutbound && currentValue > 50000) {
+          higherLimits.classList.remove("hide-me");
+          return false;
+        } else if (!isOutbound && currentValue > 1000) {
+          higherLimits.classList.remove("hide-me");
+          return false;
+        } else {
+          higherLimits.classList.add("hide-me");
+          return true;
         }
       };
 
-      const updateInput2 = (e) => {
-        const exchangeInput = document.querySelector("#exchange-input1");
-        if (!isNaN(e.target.value)) {
-          const exchangeValue = isOutbound
-            ? e.target.value * exchangeRates.outbound
-            : e.target.value / exchangeRates.inbound;
-          exchangeInput.value = exchangeValue;
+      const handleInput2Logic = (currentValue) => {
+        if (!isOutbound && currentValue > 60000) {
+          higherLimits.classList.remove("hide-me");
+          return false;
+        } else if (isOutbound && currentValue > 1000) {
+          higherLimits.classList.remove("hide-me");
+          return false;
+        } else {
+          higherLimits.classList.add("hide-me");
+          return true;
         }
+      };
+
+      const handleInput1 = (e) => {
+        const currentValue = currency(e.target.value).value;
+
+        if (!isNaN(e.target.value) && handleInput1Logic(currentValue)) {
+          handleShowRate();
+          prevInput1 = currentValue;
+          inputDebounce2();
+        } else {
+          exchangeInput1.value = prevInput1;
+        }
+      };
+
+      const handleInput2 = (e) => {
+        const currentValue = currency(e.target.value).value;
+
+        if (!isNaN(e.target.value) && handleInput2Logic(currentValue)) {
+          handleShowRate();
+          prevInput2 = currentValue;
+          inputDebounce1();
+        } else {
+          exchangeInput2.value = prevInput2;
+        }
+      };
+
+      const handleInputBlur1 = (e) => {
+        if (!e.target.value) {
+          return;
+        }
+
+        exchangeInput1.value = currencyFormatter.format(
+          currency(e.target.value)
+        );
+      };
+
+      const handleInputFocus1 = (e) => {
+        if (!e.target.value) {
+          return;
+        }
+        exchangeInput1.value = currency(e.target.value);
+      };
+
+      const handleInputBlur2 = (e) => {
+        if (!e.target.value) {
+          return;
+        }
+
+        exchangeInput2.value = currencyFormatter.format(
+          currency(e.target.value)
+        );
+      };
+
+      const handleInputFocus2 = (e) => {
+        if (!e.target.value) {
+          return;
+        }
+        exchangeInput2.value = currency(e.target.value);
+      };
+
+      const handleSubmit = () => {
+        window.location.href = "https://app.tanggapp.com/Register";
       };
 
       const handleExchangeLogic = () => {
-        const exchangeSwitch = document.querySelector("#exchange-switch");
-        const exchangeInput1 = document.querySelector("#exchange-input1");
-        const exchangeInput2 = document.querySelector("#exchange-input2");
-
         const localRates = localStorage.getItem("exchange");
 
         if (!localRates) {
           // fetch rates
-          const rates = defaultRates;
+          const rates = promoRates;
           localStorage.setItem("exchange", JSON.stringify(rates));
           exchangeRates = rates;
         } else {
           exchangeRates = JSON.parse(localRates);
         }
 
+        promoText.textContent = `₱${exchangeRates.outbound} = $1`;
+
         exchangeSwitch.addEventListener("click", _.debounce(changeFlow, 200));
-        exchangeInput1.addEventListener("input", _.debounce(updateInput1, 100));
-        exchangeInput2.addEventListener("input", _.debounce(updateInput2, 100));
+        exchangeInput1.addEventListener("input", handleInput1);
+        exchangeInput1.addEventListener("blur", handleInputBlur1);
+        exchangeInput1.addEventListener("focus", handleInputFocus1);
+        exchangeInput2.addEventListener("input", handleInput2);
+        exchangeInput2.addEventListener("blur", handleInputBlur2);
+        exchangeInput2.addEventListener("focus", handleInputFocus2);
+        submitBtn.addEventListener("click", handleSubmit);
       };
 
       document.addEventListener("DOMContentLoaded", handleExchangeLogic);
