@@ -405,6 +405,9 @@
       const changeFlow = () => {
         isOutbound = !isOutbound;
 
+        exchangeInput1.placeholder = isOutbound ? exchangeRates.outbound : 1;
+        exchangeInput2.placeholder = isOutbound ? 1 : exchangeRates.inbound;
+
         // Update currency
         input1Container.classList.toggle("currency1");
         input1Container.classList.toggle("currency2");
