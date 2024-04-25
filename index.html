@@ -350,12 +350,12 @@
 
       const updateInput1 = () => {
         const exchangeValue = isOutbound
-          ? prevInput2 * exchangeRates.outbound
-          : prevInput2 / exchangeRates.inbound;
+          ? prevInput2 * promoRates.outbound
+          : prevInput2 / promoRates.inbound;
 
         const offerExchangeValue = isOutbound
-          ? prevInput2 * defaultRates.outbound - exchangeValue
-          : prevInput2 / defaultRates.inbound - exchangeValue;
+          ? prevInput2 * exchangeRates.outbound - exchangeValue
+          : prevInput2 / exchangeRates.inbound - exchangeValue;
 
         exchangeInput1.value = currencyFormatter.format(
           currency(exchangeValue)
@@ -375,12 +375,12 @@
 
       const updateInput2 = () => {
         const exchangeValue = isOutbound
-          ? prevInput1 / exchangeRates.outbound
-          : prevInput1 * exchangeRates.inbound;
+          ? prevInput1 / promoRates.outbound
+          : prevInput1 * promoRates.inbound;
 
         const offerExchangeValue = isOutbound
-          ? exchangeValue * defaultRates.outbound - prevInput1
-          : exchangeValue / defaultRates.inbound - prevInput1;
+          ? exchangeValue * exchangeRates.outbound - prevInput1
+          : exchangeValue / exchangeRates.inbound - prevInput1;
 
         exchangeInput2.value = currencyFormatter.format(
           currency(exchangeValue)
@@ -408,16 +408,13 @@
         }
         showRate = false;
         promoContainer.classList.remove("hide-me");
-        promoText.textContent = isOutbound
-          ? `₱${exchangeRates.outbound} = $1`
-          : `$1 = ₱${exchangeRates.inbound}`;
       };
 
       const changeFlow = () => {
         isOutbound = !isOutbound;
 
-        exchangeInput1.placeholder = isOutbound ? exchangeRates.outbound : 1;
-        exchangeInput2.placeholder = isOutbound ? 1 : exchangeRates.inbound;
+        exchangeInput1.placeholder = isOutbound ? promoRates.outbound : 1;
+        exchangeInput2.placeholder = isOutbound ? 1 : promoRates.inbound;
 
         // Update currency
         input1Container.classList.toggle("currency1");
@@ -436,8 +433,8 @@
 
         // Update Promo
         promoText.textContent = isOutbound
-          ? `₱${exchangeRates.outbound} = $1`
-          : `$1 = ₱${exchangeRates.inbound}`;
+          ? `₱${promoRates.outbound} = $1`
+          : `$1 = ₱${promoRates.inbound}`;
 
         // Reset input and range
         exchangeInput1.value = "";
@@ -539,20 +536,38 @@
         window.open("https://app.tanggapp.com/Register", "_blank");
       };
 
+      const setFxInLocal = async () => {
+        const responseRates = await fetch(
+          "https://stagingapi.tangapp.org/api/v1/sendmoney/public/fx"
+        );
+        if (responseRates.status === 200) {
+          const jsonRates = await responseRates.json();
+          localStorage.setItem(
+            "exchange",
+            JSON.stringify({ rates: jsonRates, time: Date.now() })
+          );
+          exchangeRates = jsonRates;
+          return;
+        }
+        exchangeRates = defaultRates;
+      };
+
       const handleExchangeLogic = () => {
         const localRates = localStorage.getItem("exchange");
 
-        if (!localRates) {
-          // fetch rates
-          const rates = promoRates;
-          localStorage.setItem("exchange", JSON.stringify(rates));
-          exchangeRates = rates;
+        if (localRates) {
+          const rates = JSON.parse(localRates);
+          if (Date.now() - Number(rates.time) > 86400000) {
+            setFxInLocal();
+          } else {
+            exchangeRates = rates.rates;
+          }
         } else {
-          exchangeRates = JSON.parse(localRates);
+          setFxInLocal();
         }
 
-        promoText.textContent = `₱${exchangeRates.outbound} = $1`;
-        exchangeInput1.placeholder = exchangeRates.outbound;
+        promoText.textContent = `₱${promoRates.outbound} = $1`;
+        exchangeInput1.placeholder = promoRates.outbound;
         exchangeInput2.placeholder = 1;
 
         exchangeSwitch.addEventListener("click", _.debounce(changeFlow, 200));
