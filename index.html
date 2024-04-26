@@ -262,7 +262,11 @@
         /></span>
         <span class="light-text hide-me" id="higher-limits">
           Need higher limits?
-          <span style="color: #4cb4fa; cursor: pointer">Contact us</span>
+          <span
+            style="color: #4cb4fa; cursor: pointer"
+            onclick="handleContactUs()"
+            >Contact us</span
+          >
         </span>
       </div>
       <div class="exchange-input-container">
@@ -270,7 +274,7 @@
           for="exchange-input2"
           style="display: block"
           class="exchange-input-label"
-          >They Receive</label
+          >They receive</label
         >
         <span id="input2" class="input-currency currency2">
           <input
@@ -284,7 +288,7 @@
       <div class="promo-parent-container">
         <div class="exchange-promo hide-me" id="promo-container">
           <span class="light-text promo-text"
-            >Promo rate applied on your first 3 transfers</span
+            >Promo applied on first 3 transfers</span
           >
           <span class="exchange-promo-offer">
             <img src="promo.svg" alt="promo" />
@@ -293,12 +297,11 @@
         </div>
         <div class="offer-container hide-me" id="offer-container">
           <span class="light-text" style="color: #00873f"
-            >You save
-            <span style="font-weight: 700" id="offer-value"></span>
+            >You save <span style="font-weight: 700" id="offer-value"></span>*
           </span>
         </div>
       </div>
-      <button id="submit-btn">Continue</button>
+      <button id="submit-btn" onclick="handleSubmit()">Continue</button>
       <span class="dependent-text light-text">*Dependent on live rate</span>
     </section>
     <script>
@@ -337,9 +340,6 @@
       // inputs
       const exchangeInput1 = document.querySelector("#exchange-input1");
       const exchangeInput2 = document.querySelector("#exchange-input2");
-
-      // submit
-      const submitBtn = document.querySelector("#submit-btn");
 
       // higher limits
       const higherLimits = document.querySelector("#higher-limits");
@@ -536,6 +536,10 @@
         window.open("https://app.tanggapp.com/Register", "_blank");
       };
 
+      const handleContactUs = () => {
+        window.open("https://www.tanggapp.com/support", "_blank");
+      };
+
       const setFxInLocal = async () => {
         const responseRates = await fetch(
           "https://stagingapi.tangapp.org/api/v1/sendmoney/public/fx"
@@ -577,7 +581,6 @@
         exchangeInput2.addEventListener("input", handleInput2);
         exchangeInput2.addEventListener("blur", handleInputBlur2);
         exchangeInput2.addEventListener("focus", handleInputFocus2);
-        submitBtn.addEventListener("click", handleSubmit);
       };
 
       document.addEventListener("DOMContentLoaded", handleExchangeLogic);
