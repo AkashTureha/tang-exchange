@@ -45,6 +45,10 @@ const higherLimits = document.querySelector("#higher-limits");
 const offerContainer = document.querySelector("#offer-container");
 const offerValue = document.querySelector("#offer-value");
 
+// contact btn
+const submitBtn = document.querySelector("#submit-btn");
+const contactBtn = document.querySelector("#contact-limit");
+
 const updateInput1 = () => {
   const exchangeValue = isOutbound
     ? prevInput2 * promoRates.outbound
@@ -144,27 +148,25 @@ const changeFlow = () => {
 const handleInput1Logic = (currentValue) => {
   if (isOutbound && currentValue > 50000) {
     higherLimits.classList.remove("hide-me");
-    return false;
   } else if (!isOutbound && currentValue > 1000) {
     higherLimits.classList.remove("hide-me");
-    return false;
   } else {
     higherLimits.classList.add("hide-me");
-    return true;
   }
+
+  return currentValue < 1000000000000000;
 };
 
 const handleInput2Logic = (currentValue) => {
   if (!isOutbound && currentValue > 60000) {
     higherLimits.classList.remove("hide-me");
-    return false;
   } else if (isOutbound && currentValue > 1000) {
     higherLimits.classList.remove("hide-me");
-    return false;
   } else {
     higherLimits.classList.add("hide-me");
-    return true;
   }
+
+  return currentValue < 1000000000000000;
 };
 
 const handleInput1 = (e) => {
@@ -268,6 +270,8 @@ const handleExchangeLogic = () => {
   exchangeInput2.placeholder = 1;
 
   exchangeSwitch.addEventListener("click", _.debounce(changeFlow, 200));
+  submitBtn.addEventListener("click", handleSubmit);
+  contactBtn.addEventListener("click", handleContactUs);
   exchangeInput1.addEventListener("input", handleInput1);
   exchangeInput1.addEventListener("blur", handleInputBlur1);
   exchangeInput1.addEventListener("focus", handleInputFocus1);
