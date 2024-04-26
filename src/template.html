@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+  </head>
+  <body>
+    <section id="exchange-section">
+      <div id="exchange-switch-container">
+        <div id="exchange-btn1" class="exchange-switch-btn">
+          <img src="./assets/ph_flag.svg" alt="Philippines" />
+          <h1 class="exchange-switch-btn-title">PH</h1>
+        </div>
+        <img
+          id="exchange-switch"
+          style="cursor: pointer"
+          src="./assets/switch.svg"
+          alt="switch"
+        />
+        <div id="exchange-btn2" class="exchange-switch-btn">
+          <img src="./assets/us_flag.svg" alt="United States" />
+          <h1 class="exchange-switch-btn-title">U.S.</h1>
+        </div>
+      </div>
+      <div class="exchange-input-container">
+        <label
+          for="exchange-input1"
+          style="display: block"
+          class="exchange-input-label"
+          >You send</label
+        >
+        <span id="input1" class="input-currency currency1">
+          <input
+            type="text"
+            name=""
+            id="exchange-input1"
+            class="exchange-input"
+            autocomplete="off"
+            inputmode="decimal"
+        /></span>
+        <span class="light-text hide-me" id="higher-limits">
+          Need higher limits?
+          <span
+            style="color: #4cb4fa; cursor: pointer"
+            onclick="handleContactUs()"
+            >Contact us</span
+          >
+        </span>
+      </div>
+      <div class="exchange-input-container">
+        <label
+          for="exchange-input2"
+          style="display: block"
+          class="exchange-input-label"
+          >They receive</label
+        >
+        <span id="input2" class="input-currency currency2">
+          <input
+            type="text"
+            name=""
+            id="exchange-input2"
+            class="exchange-input"
+            autocomplete="off"
+        /></span>
+      </div>
+      <div class="promo-parent-container">
+        <div class="exchange-promo hide-me" id="promo-container">
+          <span class="light-text promo-text"
+            >Promo applied on first 3 transfers</span
+          >
+          <span class="exchange-promo-offer">
+            <img src="./assets/promo.svg" alt="promo" />
+            <span class="light-text">0</span>
+          </span>
+        </div>
+        <div class="offer-container hide-me" id="offer-container">
+          <span class="light-text" style="color: #00873f"
+            >You save <span style="font-weight: 700" id="offer-value"></span>*
+          </span>
+        </div>
+      </div>
+      <button id="submit-btn" onclick="handleSubmit()">Continue</button>
+      <span class="dependent-text light-text">*Dependent on live rate</span>
+    </section>
+  </body>
+</html>
